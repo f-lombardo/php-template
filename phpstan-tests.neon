@@ -1,0 +1,15 @@
+ok90includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-symfony/rules.neon
+    - vendor/phpstan/phpstan-symfony/extension.neon
+
+parameters:
+    level: 8
+    checkMissingIterableValueType: false
+    symfony:
+        container_xml_path: var/cache/test/App_KernelTestDebugContainer.xml
+    excludePaths:
+    	- tests/Behat/
+    bootstrapFiles:
+        - tests/bootstrap.php

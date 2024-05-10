@@ -10,14 +10,20 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libpq-dev \
     libicu-dev \
+    openssl \
+    curl \
     && apt-get clean
 
 # Install Composer
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-# install xdebug
-RUN pecl install xdebug \
+# Install xdebug-3.2.2 This fixed version solves problems developing on Apple Silicon. Check for future versions
+RUN pecl install xdebug-3.2.2 \
 && docker-php-ext-enable xdebug
+
+RUN docker-php-ext-install zip intl bcmath
+
+RUN docker-php-ext-enable opcache
 
 COPY php-custom.ini /usr/local/etc/php/conf.d/docker-php-custom.ini
 COPY xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini

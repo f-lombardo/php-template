@@ -1,0 +1,80 @@
+{
+    "name": "f-lombardo/php-template",
+    "description": "Template project for PHP development with Docker",
+    "type": "project",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=8.1",
+        "ext-bcmath": "*",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "ext-intl": "*",
+        "ext-openssl": "*",
+        "ext-fileinfo": "*"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        },
+        "optimize-autoloader": true,
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true,
+        "process-timeout": 480
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "cs-fix": "XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix",
+        "cs-fix-ci": "XDEBUG_MODE=off ./vendor/bin/php-cs-fixer fix --dry-run",
+        "unit-tests": "SYMFONY_DEPRECATIONS_HELPER=disabled  ./vendor/bin/phpunit --exclude-group integration",
+        "functional-tests": "php vendor/bin/behat -f progress",
+        "functional-coverage": "XDEBUG_MODE=coverage php vendor/bin/behat -f progress --profile coverage | tee coverage_tmp.txt && tail -n 7 coverage_tmp.txt > coverage/coverage.txt && rm coverage_tmp.txt",
+        "tests": [
+            "@unit-tests",
+            "@functional-tests"
+        ],
+        "ci": [
+            "@cs-fix-ci",
+            "@phpstan",
+            "@tests"
+        ],
+        "phpstan": [
+            "@phpstan-src",
+            "@phpstan-tests"
+        ],
+        "quality": [
+            "@rector",
+            "@cs-fix",
+            "@phpstan"
+        ],
+        "phpstan-src": "XDEBUG_MODE=off php -d memory_limit=-1 ./vendor/bin/phpstan analyse -c phpstan.neon src migrations --no-progress",
+        "phpstan-tests": "XDEBUG_MODE=off php -d memory_limit=-1 ./vendor/bin/phpstan analyse -c phpstan-tests.neon tests --no-progress",
+        "rector-dry-run": "XDEBUG_MODE=off vendor/bin/rector -n",
+        "rector": "XDEBUG_MODE=off vendor/bin/rector"
+    },
+    "require-dev": {
+        "behat/behat": "^3.10",
+        "coduo/php-matcher": "^6.0",
+        "dvdoug/behat-code-coverage": "^5.2",
+        "friends-of-behat/mink-browserkit-driver": "^1.6",
+        "friendsofphp/php-cs-fixer": "^3.8",
+        "league/flysystem-memory": "^3.13",
+        "phpstan/phpstan": "^1.5",
+        "phpstan/phpstan-phpunit": "^1.1",
+        "phpunit/phpunit": "^9.5",
+        "rector/rector": "^0.15.2",
+        "soyuka/contexts": "^3.3"
+    }
+}
