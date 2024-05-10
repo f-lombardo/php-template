@@ -1,0 +1,13 @@
+services:
+    php:
+        container_name: ${COMPOSE_PROJECT_NAME}-php
+        build:
+            context: php
+            args:
+                PHP_VERSION: ${PHP_VERSION}
+                COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
+        volumes:
+            - ${APP_PATH}:/var/${COMPOSE_PROJECT_NAME}
+        environment:
+            PHP_IDE_CONFIG: serverName=PHPSTORM
+
