@@ -1,6 +1,8 @@
 services:
     php:
         container_name: ${COMPOSE_PROJECT_NAME}-php
+        stdin_open: true
+        tty: true
         build:
             context: php
             args:
