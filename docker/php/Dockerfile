@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libpq-dev \
     libicu-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
     openssl \
     curl \
     && apt-get clean
@@ -41,7 +44,8 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN pecl install xdebug-3.2.2 \
 && docker-php-ext-enable xdebug
 
-RUN docker-php-ext-install zip intl bcmath
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd zip intl bcmath
 
 RUN docker-php-ext-enable opcache
 
