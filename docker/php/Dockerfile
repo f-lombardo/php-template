@@ -14,6 +14,28 @@ RUN apt-get update && apt-get install -y \
     curl \
     && apt-get clean
 
+# UID/GID/CONTAINER_USER passati da docker-compose
+ARG UID=1000
+ARG GID=1000
+ARG CONTAINER_USER=www-data
+
+# Crea gruppo e utente con stessi UID/GID dell'utente host
+RUN set -eux; \
+    if getent group "${CONTAINER_USER}" > /dev/null; then \
+        groupmod -o -g "${GID}" "${CONTAINER_USER}"; \
+    elif getent group "${GID}" > /dev/null; then \
+        groupmod -n "${CONTAINER_USER}" "$(getent group "${GID}" | cut -d: -f1)"; \
+    else \
+        groupadd -g "${GID}" "${CONTAINER_USER}"; \
+    fi; \
+    if id -u "${CONTAINER_USER}" > /dev/null 2>&1; then \
+        usermod -o -u "${UID}" -g "${GID}" "${CONTAINER_USER}"; \
+    else \
+        useradd -m -o -u "${UID}" -g "${GID}" "${CONTAINER_USER}"; \
+    fi
+
+USER $CONTAINER_USER
+
 # Install Composer
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
