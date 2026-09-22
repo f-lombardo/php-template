@@ -34,8 +34,6 @@ RUN set -eux; \
         useradd -m -o -u "${UID}" -g "${GID}" "${CONTAINER_USER}"; \
     fi
 
-USER $CONTAINER_USER
-
 # Install Composer
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
@@ -52,3 +50,11 @@ COPY xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 ARG COMPOSE_PROJECT_NAME
 WORKDIR /var/${COMPOSE_PROJECT_NAME}
+
+ENV COMPOSER_HOME=/tmp/composer \
+    COMPOSER_CACHE_DIR=/tmp/composer/cache
+
+RUN mkdir -p "${COMPOSER_CACHE_DIR}" \
+    && chown -R "${UID}:${GID}" /tmp/composer
+
+USER $CONTAINER_USER
