@@ -8,8 +8,10 @@ services:
             args:
                 PHP_VERSION: ${PHP_VERSION}
                 COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
+                UID: ${UID:-1000}
+                GID: ${GID:-1000}
+                CONTAINER_USER: ${CONTAINER_USER:-www-data}
         volumes:
             - ${APP_PATH}:/var/${COMPOSE_PROJECT_NAME}
         environment:
             PHP_IDE_CONFIG: serverName=PHPSTORM
-
