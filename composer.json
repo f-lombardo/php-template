@@ -9,14 +9,16 @@
         "php": ">=8.1",
         "ext-bcmath": "*",
         "ext-ctype": "*",
+        "ext-fileinfo": "*",
         "ext-iconv": "*",
         "ext-intl": "*",
         "ext-openssl": "*",
-        "ext-fileinfo": "*"
+        "theodo-group/llphant": "^1.0"
     },
     "config": {
         "allow-plugins": {
-            "composer/package-versions-deprecated": true
+            "composer/package-versions-deprecated": true,
+            "php-http/discovery": false
         },
         "optimize-autoloader": true,
         "preferred-install": {

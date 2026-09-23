@@ -1,4 +1,4 @@
-ARG COMPOSER_VERSION=2
+ARG COMPOSER_VERSION=2.9.5
 ARG PHP_VERSION
 
 FROM composer:$COMPOSER_VERSION AS composer
@@ -41,13 +41,12 @@ RUN set -eux; \
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # Install xdebug-3.2.2 This fixed version solves problems developing on Apple Silicon. Check for future versions
-RUN pecl install xdebug-3.2.2 \
+RUN pecl install xdebug-3.5.3 \
 && docker-php-ext-enable xdebug
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd zip intl bcmath
 
-RUN docker-php-ext-enable opcache
 
 COPY php-custom.ini /usr/local/etc/php/conf.d/docker-php-custom.ini
 COPY xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
